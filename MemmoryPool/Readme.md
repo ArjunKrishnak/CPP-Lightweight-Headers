@@ -1,6 +1,6 @@
 
-Singe CPP header for memory pool
-Sample usage
+- Singe CPP header for memory pool
+- Sample usage:
 ``` 
 unsigned long ulUnitNum = 4;
 unsigned long ulUnitSize = 32;
