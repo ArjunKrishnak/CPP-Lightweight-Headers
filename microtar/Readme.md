@@ -29,44 +29,44 @@ mtar_close(&tar);
 - Reading in memmory stream
 ```
 /* struct to hold MemStream for tarball reading*/
-	struct MemStream{
-		char* beg;
-		char* buff;
-	};
+struct MemStream{
+	char* beg;
+	char* buff;
+};
 
-	int mem_read(mtar_t *tar, void *data, unsigned size){
-		MemStream* ss = (MemStream*) tar->stream;
-		memcpy(data,ss->buff,size);
-		return MTAR_ESUCCESS;
-	}
-	int mem_seek(mtar_t *tar, unsigned pos){
-		MemStream* ss = (MemStream*) tar->stream;
-		ss->buff = ss->beg + pos;
-		return MTAR_ESUCCESS;
-	}
-	int mem_close(mtar_t *tar){
-		return MTAR_ESUCCESS;
-	}
+int mem_read(mtar_t *tar, void *data, unsigned size){
+	MemStream* ss = (MemStream*) tar->stream;
+	memcpy(data,ss->buff,size);
+	return MTAR_ESUCCESS;
+}
+int mem_seek(mtar_t *tar, unsigned pos){
+	MemStream* ss = (MemStream*) tar->stream;
+	ss->buff = ss->beg + pos;
+	return MTAR_ESUCCESS;
+}
+int mem_close(mtar_t *tar){
+	return MTAR_ESUCCESS;
+}
 
-	/* Read tarball and save to indexedDB */
-	void readTar(std::string destination, char* source){
-		mtar_t* tar = new mtar_t();
-		tar->read = mem_read;
-		tar->seek = mem_seek;
-		tar->close = mem_close;
-		
-		MemStream* memStream = new MemStream();
-		memStream->beg = source;
-		memStream->buff = source;
-		tar->stream = (void*)memStream;
-		
-		mtar_header_t h;
-		std::cout<<"source: "<<source<<std::endl;
-		while((mtar_read_header(tar, &h)) != MTAR_ENULLRECORD ) {
-			std::cout << "h.name: "<<h.name<<std::endl;
-			mtar_next(tar);
-		}
+/* Read tarball and save to indexedDB */
+void readTar(std::string destination, char* source){
+	mtar_t* tar = new mtar_t();
+	tar->read = mem_read;
+	tar->seek = mem_seek;
+	tar->close = mem_close;
+
+	MemStream* memStream = new MemStream();
+	memStream->beg = source;
+	memStream->buff = source;
+	tar->stream = (void*)memStream;
+
+	mtar_header_t h;
+	std::cout<<"source: "<<source<<std::endl;
+	while((mtar_read_header(tar, &h)) != MTAR_ENULLRECORD ) {
+		std::cout << "h.name: "<<h.name<<std::endl;
+		mtar_next(tar);
 	}
+}
 ```
 - Writing file
  ```
