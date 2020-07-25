@@ -48,7 +48,7 @@ int mem_close(mtar_t *tar){
 	return MTAR_ESUCCESS;
 }
 
-/* Read tarball and save to indexedDB */
+/* Read tarball */
 void readTar(std::string destination, char* source){
 	mtar_t* tar = new mtar_t();
 	tar->read = mem_read;
